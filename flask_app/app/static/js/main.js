@@ -20,7 +20,7 @@ var width = 600,
     height = 700,
     centerx = width /2,
     centery = height /2,
-    minDist = 50,
+    minDist = 80,
     circleRadius = 20,
     maxLength = (centerx - circleRadius) - 50;
 
@@ -28,11 +28,11 @@ var graph = d3.select(".graph")
     .attr("width", width)
     .attr("height", height);
 
-reloadData(0, time);
+startData(0, time);
 
 
-function reloadData(time, timeData){
-	d3.selectAll("svg > *").remove();
+function startData(time, timeData){
+	graph.selectAll("svg > *").remove();
 	var data = new Array;
 	data = timeData[time];
 	//for(var person in timeData[time]) {
@@ -46,7 +46,9 @@ function reloadData(time, timeData){
 	    });
 
 	circles.append("rect")
-	    .attr("x",0)
+	.transition()
+		//-2 for width offset
+	    .attr("x",-2)
 	    .attr("y",0)
 	    .attr("height", function(d){return (minDist+ d.tieStrength * maxLength);})
 	    .attr("width", 4)
@@ -55,25 +57,33 @@ function reloadData(time, timeData){
 	    });
 
 	circles.append("circle")
-	    .attr("cy", function(d, i){ 
-	    	var degrees = i * (360/data.length);
-	    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
-	    	return ytrans; 
-	    })
-	    .attr("cx", function(d, i){ 
-	    	var degrees = i * (360/data.length);
-	    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * d.tieStrength + minDist));
-			return xtrans;
-	    })
-	    .attr("r", circleRadius)
-	    .attr("fill", function(d){
-	    	console.log(d);
-			var red = 255 * d.tieStrengthDerivative;
-			var green = 255 - 255 * d.tieStrengthDerivative;
-			var blue = 0;
-			console.log(red);
-	    	return "rgb(" + red + "," + green + "," + blue+")";
-	    });
+		.transition()
+		    .attr("cy", function(d, i){ 
+		    	var degrees = i * (360/data.length);
+		    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+		    	return ytrans; 
+		    })
+		    .attr("cx", function(d, i){ 
+		    	var degrees = i * (360/data.length);
+		    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+				return xtrans;
+		    })
+		    .attr("r", circleRadius)
+		    .attr("fill", function(d){
+		    	//console.log(d);
+				var red = 0;
+				var green = 0; parseInt(255 - 255 * d.tieStrengthDerivative);
+				var blue = 0;
+				if (d.tieStrengthDerivative > 0.5){
+					red = parseInt(255 - (255 * (d.tieStrengthDerivative - 0.5))*2);
+					green = 255;
+				}
+				else{
+					green = parseInt(255 * d.tieStrengthDerivative * 2);
+					red = 255;
+				}
+		    	return "rgb(" + red + "," + green + "," + blue+")";
+		    });
 
 
 	circles.append("text")
@@ -88,6 +98,61 @@ function reloadData(time, timeData){
 	    .attr("cx", centerx)
 	    .attr("fill", "red")
 	    .attr("r", circleRadius * 2);
+}
+
+
+function reloadData(time, timeData){
+	//graph.selectAll("svg > *").remove();
+	var data = new Array;
+	data = timeData[time];
+	var circles = graph.selectAll("g").data(data).transition();
+
+	circles.select("rect")
+		//-2 for width offset
+	    .attr("x",-2)
+	    .attr("y",0)
+	    .attr("height", function(d){return (minDist+ d.tieStrength * maxLength);})
+	    .attr("width", 4)
+	    .attr("transform", function(d, i){ 
+	    	return  "rotate(" + (i * (360/data.length))  + ", 0, 0)"; 
+	    });
+
+
+	circles.select("circle")
+	    .attr("cy", function(d, i){ 
+	    	var degrees = i * (360/data.length);
+	    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+	    	return ytrans; 
+	    })
+	    .attr("cx", function(d, i){ 
+	    	var degrees = i * (360/data.length);
+	    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+			return xtrans;
+	    })
+	    .attr("r", circleRadius)
+	    .attr("fill", function(d){
+	    	//console.log(d);
+			var red = 0;
+			var green = 0; parseInt(255 - 255 * d.tieStrengthDerivative);
+			var blue = 0;
+			if (d.tieStrengthDerivative > 0.5){
+				red = parseInt(255 - (255 * (d.tieStrengthDerivative - 0.5))*2);
+				green = 255;
+			}
+			else{
+				green = parseInt(255 * d.tieStrengthDerivative * 2);
+				red = 255;
+			}
+	    	return "rgb(" + red + "," + green + "," + blue+")";
+	    });
+
+
+	circles.select("text")
+	    .attr("x", 0)
+	    .attr("y", 0)
+	    .attr("dy", ".35em")
+	    .text(function(d) { return d.tieStrength; });
+
 }
 
 
