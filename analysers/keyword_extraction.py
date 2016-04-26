@@ -1,17 +1,11 @@
-
-# coding: utf-8
-
-# In[48]:
-
 from alchemyapi import AlchemyAPI
 import json
 import sys
 
-def return_sentiments(d, week):
+def return_sentiments(all_messages):
     sentiments = {}
-    messages_dict = d[week]
-    for recipient in messages_dict:
-        text = messages_dict[recipient]
+    for recipient in all_messages:
+        text = all_messages[recipient]
         sentiments[recipient] = get_keywords(text)
     return sentiments
             
@@ -29,9 +23,4 @@ def get_keywords(text):
     else:
         print('Error in keyword extaction call: ', response['statusInfo'])
     return score / count
-
-
-# In[ ]:
-
-
 

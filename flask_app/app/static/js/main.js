@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 //data format: 
 //	time array [ 
 //			person array [
@@ -169,3 +170,5 @@ function radians(degrees) {
 function degrees(radians) {
   return radians * 180 / Math.PI;
 };
+=======
+>>>>>>> ef7a3c037fcc5c9cf8a6db669f00259849c9dd69

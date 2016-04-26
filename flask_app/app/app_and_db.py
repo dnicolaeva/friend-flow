@@ -12,3 +12,4 @@ webassets = Environment(app)
 
 from app.startup import assets
 from app.pages import views
+from app.pages import dataloader

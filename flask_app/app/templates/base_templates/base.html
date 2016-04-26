@@ -7,17 +7,25 @@
         {% assets "css_main" %}
         <link rel="stylesheet" href="{{ ASSET_URL }}">
         {% endassets %}
+        <script type="text/javascript">
+          var $SCRIPT_ROOT = {{ request.script_root|tojson|safe }};
+        </script> 
         <title>FriendFlow</title>
     </head>
     <body>
-        <div class="container main">
-            {% block main %}{% endblock -%}
-            {% assets "js_libs" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-            {% endassets %}
-            {% assets "js_main" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-            {% endassets %}
+        {% include 'base_templates/navbar.html' %}
+        
+        <div class="container">
+            {% block main %}{% endblock -%}  
         </div>
+
+
+        {% assets "js_libs" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {% assets "js_main" %}
+        <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        {% block scripts %}{% endblock -%}  
     </body>
 </html>
