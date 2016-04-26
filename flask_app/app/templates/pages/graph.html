@@ -1,0 +1,10 @@
+{% extends "base_templates/base.html" %}
+
+{% block main %}
+<svg class="graph"></svg>
+<input class ="slider" type="range" min="0" max="100" step="1" value="0" oninput="updateSlider(this.value)"></input>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="static/js/graph.js"></script>
+{% endblock %}
