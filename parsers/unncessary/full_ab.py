@@ -39,6 +39,8 @@ def w_load_address_book(FB_addressbook, imessage_addressbook):
 	id_to_name = {}
 	name_to_id = {}
 
+	print FB_addressbook
+
 	# Traverse over imessage address book as these are the only ones with messages 
 	# (and thus the only ones we care about)
 	for receipient in imessage_addressbook:
@@ -56,11 +58,11 @@ def w_load_address_book(FB_addressbook, imessage_addressbook):
 			number = imessage_number
 			ID = receipient.id
 			
+			print name, number, ID
+			
 			name_to_number[name] = number
 			number_to_name[number] = name
 			id_to_name[ID] = name
 			name_to_id[name] = ID
-		# else:
-		# 	print 'Can\'t find pair to: ' + imessage_number + '\n'
 
 	return FullAddressBook(name_to_number, number_to_name, id_to_name, name_to_id)

@@ -1,7 +1,6 @@
-from app.app_and_db import app, db, oauth
-from app.pages.models import City, Response
+from app.app_and_db import app
 from datetime import datetime
-from flask import jsonify, render_template, redirect, request, url_for
+from flask import jsonify, render_template, redirect, url_for
 
 import requests
  

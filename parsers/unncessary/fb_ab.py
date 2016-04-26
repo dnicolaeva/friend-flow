@@ -22,6 +22,7 @@ class FBAddressBook:
 			return None
 		return self.name_to_number[name]
 
+
 def load_address_book(path):
 	# path = 'facebook-dnicolaeva/html/contact_info.htm'
 	fd = open(path, 'r')
@@ -34,20 +35,29 @@ def load_address_book(path):
 	name_to_number = {}
 
 	for row in address_contacts:
-		columns = row.find_all('td')
-		if len(columns) > 0:
-			name = columns[0].get_text()
-			phone = None
-			
-			for item in columns[1].find_all('li'):
-				text = item.get_text()
-				if "contact" in text and "@" not in text:
-					phone = re.sub('[^0-9]','', text)
-
-			if phone is not None:
-				name = name.encode('ascii', 'ignore')
-				phone = phone.encode('ascii', 'ignore')
-				name_to_number[name] = "+" + phone
-				number_to_name[phone] = name
+		name_to_number, number_to_name = add_row_address_book(row, name_to_number, number_to_name)
 
 	return FBAddressBook(name_to_number, number_to_name)
+
+def add_row_address_book(row, name_to_number, number_to_name):
+	columns = row.find_all('td')
+	if len(columns) > 0:
+		name = columns[0].get_text()
+		phone = None
+		
+		for item in columns[1].find_all('li'):
+			text = item.get_text()
+			if "contact" in text and "@" not in text:
+				phone = re.sub('[^0-9]','', text)
+
+		if phone is not None:
+			name = name.encode('ascii', 'ignore')
+			phone = phone.encode('ascii', 'ignore')
+			name_to_number[name] = "+" + phone
+			number_to_name[phone] = name
+
+	return (name_to_number, number_to_name)
+
+
+
+	
