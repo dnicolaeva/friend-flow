@@ -4,10 +4,15 @@ from flask import jsonify, render_template, redirect, url_for, request
 from werkzeug import secure_filename
 import requests
 import dataloader
+import json
  
 # These are the extension that we are accepting to be uploaded
 app.config['ALLOWED_EXTENSIONS'] = set(['htm', 'html'])
+
+# Global variables
+message_file = None 
 processed_json = {}
+
 # For a given file, return whether it's an allowed type or not
 def allowed_file(filename):
     return '.' in filename and \
@@ -15,25 +20,41 @@ def allowed_file(filename):
 
 @app.route('/')
 def index():
-  # return render_template('pages/test_individual_graph.html')
   return render_template('pages/default.html')
 
 # Route that will process the file upload
 @app.route('/upload', methods=['POST'])
 def upload():
   file = request.files['file']
-  if file and allowed_file(file.filename):
-      global processed_json
-      processed_json = dataloader.load_friendship_json(file)
-      if processed_json is None:
-        print "Invalid file schema"
-        return redirect(url_for('index'))
-      else:
-        return render_template('pages/graph.html')
   
-  elif file:
-  	print "Invalid file type"
-  	return redirect(url_for('index'))
+  if not file:
+    print "No file found"
+    return redirect(url_for('index'))
+
+  if not allowed_file(file.filename):
+    print "Invalid file type"
+    return redirect(url_for('index'))
+
+  valid_file = dataloader.validify(file)
+  
+  if not valid_file:
+    print "Invalid file schema"
+    return redirect(url_for('index'))
+  
+  global message_file
+  message_file = file
+  return render_template('pages/fbfriends.html')
+  
+@app.route('/fbfriends', methods=['POST'])
+def fbfriends():
+  fbjson = request.form['fbjson']
+  
+  global message_file
+  global processed_json
+
+  processed_json = dataloader.load_friendship_json(message_file, fbfriends)
+  
+  return render_template('pages/graph.html')
 
 @app.route('/processed-json/', methods=['GET'])
 def echo():
@@ -51,4 +72,6 @@ def page_not_found(e):
 
 @app.teardown_appcontext
 def shutdown_session(exception=None):
-  db.remove()
+  # db.remove()
+  return
+

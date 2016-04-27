@@ -1,10 +1,25 @@
 {% extends "base_templates/base.html" %}
 
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="static/css/personal-graph.css">
+{% endblock %} 
+
 {% block main %}
-<svg class="graph"></svg>
-<input class ="slider" type="range" min="0" max="100" step="1" value="0" oninput="updateSlider(this.value)"></input>
+
+<div>
+	<div id="personal-graph"></div>
+	<div id="mini-graph"> </div>
+</div>
+<!-- <div id="personal-graph"></div> -->
+<div id="graph">
+	<svg class="graph"></svg>
+	<input class ="slider" type="range" min="0" max="100" step="1" value="0" oninput="updateSlider(this.value)"></input>
+</div>
+
 {% endblock %}
 
 {% block scripts %}
+<!-- Individual graph must be prior to graph due to dependencies -->
+<script type="text/javascript" src="static/js/individual-graph.js"></script>
 <script type="text/javascript" src="static/js/graph.js"></script>
 {% endblock %}

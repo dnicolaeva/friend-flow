@@ -1,0 +1,11 @@
+.graph circle {
+  /*fill: steelblue;*/
+}
+.graph rect {
+  fill: #444;
+}
+.graph text {
+  fill: black;
+  font: 10px sans-serif;
+  text-anchor: end;
+}
