@@ -9,13 +9,14 @@
 var time = [];
 
 var width = 600,
-    height = 500,
+    height = 600,
     centerx = width /2,
     centery = height /2,
-    minDist = 80,
-    circleRadius = 25,
-    maxLength = (centerx - circleRadius) - 100,
+    minDist = height/6,
+    circleRadius = height/24,
+    maxLength = (centerx - circleRadius) - height/5,
     strokeWidth = 4,
+    fontSize = height / 32,
     data = new Array;
 
 var graph = d3.select(".graph")
@@ -23,18 +24,18 @@ var graph = d3.select(".graph")
     .attr("height", height);
 
 var img_array = [
-"http://www.wall321.com/thumbnails/detail/20120506/green%20animals%20photography%20snakes%201920x1080%20wallpaper_www.wall321.com_85.jpg",
-"http://www.chainimage.com/images/download-birds-duckling-baby-swimming-animals-yellow-water-animal.jpg",
-"http://www.mobiletoones.com/downloads/wallpapers/iphone_wallpapers/preview/53/79066-cardinal-red-animal-iphone-wallpaper.jpg",
-"http://dreamlandia.com/images/L/ladybug.jpg",
-"http://animaliaz-life.com/data_images/chameleon/chameleon2.jpg",
-"http://www3.canisius.edu/~grandem/butterflylifecycle/Butterfly.jpg",
-"https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg",
-"http://static1.comicvine.com/uploads/scale_large/11122/111225835/4716707-the+mask.jpg",
-"http://animalwall.xyz/wp-content/uploads/2015/10/frogs-little-red-frog-poison-46-phone-wallpapers.jpg",
-"http://moransanimaladaptations.yolasite.com/resources/45.jpg",
-"http://science-all.com/images/fox/fox-05.jpg",
-"http://i0.wp.com/cdn.bgr.com/2015/10/bear.jpg?w=625"
+	"http://www.wall321.com/thumbnails/detail/20120506/green%20animals%20photography%20snakes%201920x1080%20wallpaper_www.wall321.com_85.jpg",
+	"http://www.chainimage.com/images/download-birds-duckling-baby-swimming-animals-yellow-water-animal.jpg",
+	"http://www.mobiletoones.com/downloads/wallpapers/iphone_wallpapers/preview/53/79066-cardinal-red-animal-iphone-wallpaper.jpg",
+	"http://dreamlandia.com/images/L/ladybug.jpg",
+	"http://animaliaz-life.com/data_images/chameleon/chameleon2.jpg",
+	"http://www3.canisius.edu/~grandem/butterflylifecycle/Butterfly.jpg",
+	"https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg",
+	"http://static1.comicvine.com/uploads/scale_large/11122/111225835/4716707-the+mask.jpg",
+	"http://animalwall.xyz/wp-content/uploads/2015/10/frogs-little-red-frog-poison-46-phone-wallpapers.jpg",
+	"http://moransanimaladaptations.yolasite.com/resources/45.jpg",
+	"http://science-all.com/images/fox/fox-05.jpg",
+	"http://i0.wp.com/cdn.bgr.com/2015/10/bear.jpg?w=625"
 ]
 
 $(window).load(function(){ 
@@ -52,15 +53,65 @@ $(window).load(function(){
 	    contentType: "application/json; charset=utf-8",
 	    success: function(response) {
 		    time = JSON.parse(response); 
-		    	console.log(time);
-
+		    //sort time array
+		    time = sortTime(time);
 			startData(0, time);
-
 			addCircleActions();
 	    }
 	});  
 
 })
+
+//arrange it so that if somebody was in an index, they stay in that index
+function sortTime(timeArray){
+	for(var a = 0; a < timeArray.length; a++){
+		if (a===0){
+			//nothin, this is the starting configuration
+		}
+		else{
+			//go through all current people
+			for(var b = 0; b < timeArray[a-1].length; b++){
+				//go through all people in previous index of timearray
+				for(var c = 0; c < timeArray[a].length; c++){
+					if (timeArray[a][b].id === timeArray[a][c].id){
+						//this is the index we should place it in
+						//swap em
+						temp = timeArray[a][b];
+						timeArray[a][b] = timeArray[a][c];
+						timeArray[a][c] = temp;
+					}
+				}
+			}
+		}
+	}
+	return timeArray;
+}
+
+function resizeGraph(newWidth, newHeight){
+	console.log("resizing to ", newWidth);
+//scale width to size of container
+	graph.selectAll("svg > *").remove();
+
+    centerx = newWidth /2,
+    graph = d3.select(".graph")
+    	.attr("width", newWidth)
+    	.attr("height", newHeight);
+
+    width = newWidth,
+    height = newHeight,
+    centerx = width /2,
+    centery = height /2,
+    minDist = height/6,
+    circleRadius = height/24,
+    maxLength = (centerx - circleRadius) - height/5,
+    strokeWidth = 4,
+    fontSize = height / 32,
+    data = new Array;
+
+	startData(0, time);
+
+	addCircleActions();
+}
 
 function startData(time, timeData){
 	//graph.selectAll("svg > *").remove();
@@ -88,13 +139,13 @@ function startData(time, timeData){
 
 	circles.append('defs')
         .append('pattern')
-            .attr('id', function(d, i) { return (img_array[i]);}) // just create a unique id (id comes from the json)
+            .attr('id', function(d, i) { return (img_array[i%img_array.length]);}) // just create a unique id (id comes from the json)
             .attr('width', 1)
             .attr('height', 1)
             .attr('patternContentUnits', 'objectBoundingBox')
             .append("svg:image")
                 .attr("xlink:xlink:href", function(d, i) { 
-               		return (img_array[i]);
+               		return (img_array[i%img_array.length]);
                 }) // "icon" is my image url. It comes from json too. The double xlink:xlink is a necessary hack (first "xlink:" is lost...).
                 .attr("x", 0)
                 .attr("y", 0)
@@ -118,7 +169,7 @@ function startData(time, timeData){
 				return xtrans;
 		    })
 		    .attr("r", circleRadius)
-		    .style("fill", function(d, i) { return ("url(#"+img_array[i]+")");})
+		    .style("fill", function(d, i) { return ("url(#"+img_array[i%img_array.length]+")");})
 		    .attr("stroke-width", strokeWidth)
 		    .attr("stroke", function(d){
 		    	return getStrokeColor(d);
@@ -134,7 +185,8 @@ function startData(time, timeData){
 		    	var ytrans = circleRadius + strokeWidth*2 + getCircleY(d,i);
 		    	return ytrans; 
 		    })
-	    .attr("dy", ".35em");
+	    .attr("dy", ".35em")
+	    .attr("font-size", fontSize);
 	
 	//root circle
 	graph.append('pattern')
@@ -206,7 +258,8 @@ function reloadData(time, timeData){
 				var ytrans = circleRadius + strokeWidth*2 + getCircleY(d,i);
 		    	return ytrans; 
 		    })
-	    .attr("dy", ".35em");
+	    .attr("dy", ".35em")
+	   	.attr("font-size", fontSize);
 
 	graph.select("circle")
 		.attr("stroke", getCenterColor());
@@ -253,6 +306,8 @@ function getCircleX(d,i){
 }
 
 function updateSlider(timeVal){
+	document.getElementById("dateDisplay").value = timeVal;
+	$("#dateDisplay").html(timeVal);
 	reloadData(timeVal, time);
 }
 
@@ -270,10 +325,14 @@ function addCircleActions(){
 	var people = document.getElementsByClassName("circle");
 	for (var i = 0; i < people.length; i++) {
 	    people[i].addEventListener("click", function() { 
-	        alert(this.id);
 	        viewPersonalGraph();
+	        resizeGraph(250, 250);
 	    });
 	}
+}
+$( "#minimize-personal" ).click(slideUpGraph());
+function slideUpGraph(){
+    $("#personal-graph").hide();
 }
 
 
