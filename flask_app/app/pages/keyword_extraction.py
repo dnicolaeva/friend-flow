@@ -4,7 +4,11 @@ import sys
 
 def return_sentiments(all_messages):
     sentiments = {}
+    print "Hey everybody!!!"
+    print all_messages
     for recipient in all_messages:
+        print recipient
+
         text = all_messages[recipient]
         sentiments[recipient] = get_keywords(text)
     return sentiments

@@ -42,7 +42,7 @@ def upload():
     return redirect(url_for('index'))
   
   global message_file
-  message_file = file
+  message_file = dataloader.read_file(file);
   return render_template('pages/fbfriends.html')
   
 @app.route('/fbfriends', methods=['POST'])

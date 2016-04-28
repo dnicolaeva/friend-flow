@@ -1,7 +1,8 @@
 //data format: 
 //	time array [ 
+//			"{"id": id, name}, {}, {}"
 //			person array [
-//				(tie strength, derivative strength, id, name)
+//				{"id": id, name}
 //			] 
 //		]
 
@@ -87,6 +88,8 @@ function startData(time, timeData){
 				.attr("preserveAspectRatio", "xMinYMin slice");
 
 	circles.append("circle")
+		.attr("id", function(d) { return (d.id);})
+		.attr("class", "circle")
 		.transition()
 		    .attr("cy", function(d, i){ 
 		    	var degrees = i * (360/data.length);
