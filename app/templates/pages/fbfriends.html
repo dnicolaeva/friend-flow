@@ -1,0 +1,77 @@
+{% extends "base_templates/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="static/css/loader.css">
+{% endblock %}
+
+{% block main %}
+<div class="starter-template">
+	<div class="row">
+	  <div class="col-md-offset-2 col-md-8">
+	  	<h1> Almost there...</h1>
+	  </div>
+	</div>
+
+	<div class="row">
+	  <div class="col-md-offset-2 col-md-8">
+	  	<h4>Recently Facebook updated their API to make it more restricted and we can't access your friends pictures through third party apps (like ours) as easily anymore. If you would like to get full experience just bear with us and request the information yourself. It only takes a minute!
+		</h4>
+	  </div>
+	</div>
+
+	<div class="row">
+	  <div class="col-md-offset-2 col-md-8">
+	  	<h4> 1. Follow 
+			<a target="_blank" href="https://developers.facebook.com/tools/explorer/145634995501895/?method=GET&path=me%2Ffriends%3Ffields%3Dpicture.width(9999).height(9999).type(large)%2Cname&version=v2.6">
+				this link
+			</a>
+			to go to the FB Graph API Explorer </h4>
+		<h4> 2. Just click the button submit to request all your friend's pictures</h4>
+		<h4> 3. Copy and paste the output in the box below </h4>
+		<h4> 4. Get ready to see some snazy visualizations! </h4>
+	  </div>
+	</div>
+
+	<div class="row">
+	  <div class="col-md-offset-2 col-md-8">
+	  	<h4> Don't worry, we don't store any of your data! </h4>
+	  </div>
+	</div>
+	
+	<div class="row">
+	  <div class="col-md-offset-2 col-md-8">
+	  	<div id="loader">Loading...</div>
+	  </div>
+	</div>
+
+	<div class="row">
+	  <div class="col-md-offset-2 col-md-8">
+	  	<form action="fbfriends" method="post" enctype="multipart/form-data">
+			
+			<div class="row form-input">
+				<div class="col-md-offset-2 col-md-8">
+					<input class="input-text" type="text" name="fbjson" >
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-offset-2 col-md-8">
+					<input class="submit-button" type="submit" value="Submit" onclick="return show_loader();" />
+				</div>
+			</div>
+		</form>
+	  </div>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="static/js/inputstyle.js"></script>
+<script type="text/javascript">
+function show_loader()
+{
+   document.getElementById("loader").style.display = 'block';
+   return true;
+}
+</script>
+{% endblock %}

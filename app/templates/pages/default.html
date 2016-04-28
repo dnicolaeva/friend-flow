@@ -1,0 +1,53 @@
+{% extends "base_templates/base.html" %}
+
+{% block styles %}
+<link rel="stylesheet" type="text/css" href="static/css/loader.css">
+{% endblock %}
+
+{% block main %}
+<div class="starter-template">
+	
+	<div class="row">
+	  	<div class="col-md-offset-2 col-md-8">
+			<h1> Hey there! Want to learn more about your friendships?</h1>
+		</div>
+	</div>
+
+	<div class="row">
+	  	<div class="col-md-offset-2 col-md-8">
+			<h4> 1. Log into Facebook and access your General Settings </h4>
+			<h4> 2. Scroll to the bottom and click "Download your Facebook personal data"</h4>
+			<h4> 3. Upload right below the file html/messages.htm </h4>
+			<h4> 4. Sit tight while we process your data, you exchanged a lot of messages! </h4>
+			<br>
+			<h4> Don't worry, we don't store any of your data! </h4>
+		</div>
+	</div>
+
+	<div id="loader">Loading...</div>
+
+	<div class="row">
+	  	<div class="col-md-offset-2 col-md-8">
+			<form action="upload" method="post" enctype="multipart/form-data">
+				
+				<div class="custom-file-upload">
+				    <input type="file" id="file" name="file"/>
+				</div>
+				<input class="submit-button" type="submit" value="Upload" onclick="return show_loader();"  />
+			</form
+		</div>
+	</div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script type="text/javascript" src="static/js/inputstyle.js"></script>
+<script type="text/javascript">
+function show_loader()
+{
+   document.getElementById("loader").style.display = 'block';
+   return true;
+}
+</script>
+{% endblock %}
