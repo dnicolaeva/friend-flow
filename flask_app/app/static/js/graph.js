@@ -88,9 +88,11 @@ function startData(time, timeData){
 				.attr("preserveAspectRatio", "xMinYMin slice");
 
 	circles.append("circle")
-		.attr("id", function(d) { return (d.id);})
+		.attr("id", function(d) { 
+			console.log("making id");
+			return (d.id);
+		})
 		.attr("class", "circle")
-		.transition()
 		    .attr("cy", function(d, i){ 
 		    	var degrees = i * (360/data.length);
 		    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
