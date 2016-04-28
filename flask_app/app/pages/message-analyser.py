@@ -1,16 +1,11 @@
 import keyword_extraction
 
-
 def message_stats(week_array):
     results = []
     runningdict = {}
     id_counter = 0
     weeknum = 1
-    print "week_array"
-    print week_array
     for week in week_array:
-        print "Week:"
-        print week
         sentiments = keyword_extraction.return_sentiments(week)
         for name in week:
             msgs = week[name]
@@ -22,8 +17,8 @@ def message_stats(week_array):
                 runningdict[name][3] += len(msgs)
                 sentiment = runningdict[name][4] * (weeknum -1)
                 sentiment = float(sentiment + sentiments[name]) / weeknum
-                runningdict[4] = sentiment
+                runningdict[name][4] = sentiment
         weeknum+=1
-        results.append(deepcopy(runningdict))       
+        results.append(runningdict)       
     return results
 

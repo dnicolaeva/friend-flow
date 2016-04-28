@@ -6,24 +6,37 @@
 
 {% block main %}
 <div class="starter-template">
-	<h1> Hey there! Want to learn more about your friendships?</h1>
-	<br>
-	<h4> 1. Log into Facebook and access your General Settings </h4>
-	<h4> 2. Scroll to the bottom and click "Download your Facebook personal data"</h4>
-	<h4> 3. Upload right below the file html/messages.htm </h4>
-	<h4> 4. Sit tight while we process your data, you exchanged a lot of messages! </h4>
-	<br>
-	<h4> Don't worry, we don't store any of your data! </h4>
+	
+	<div class="row">
+	  	<div class="col-md-offset-2 col-md-8">
+			<h1> Hey there! Want to learn more about your friendships?</h1>
+		</div>
+	</div>
+
+	<div class="row">
+	  	<div class="col-md-offset-2 col-md-8">
+			<h4> 1. Log into Facebook and access your General Settings </h4>
+			<h4> 2. Scroll to the bottom and click "Download your Facebook personal data"</h4>
+			<h4> 3. Upload right below the file html/messages.htm </h4>
+			<h4> 4. Sit tight while we process your data, you exchanged a lot of messages! </h4>
+			<br>
+			<h4> Don't worry, we don't store any of your data! </h4>
+		</div>
+	</div>
 
 	<div id="loader">Loading...</div>
 
-	<form action="upload" method="post" enctype="multipart/form-data">
-		
-		<div class="custom-file-upload">
-		    <input type="file" id="file" name="file"/>
+	<div class="row">
+	  	<div class="col-md-offset-2 col-md-8">
+			<form action="upload" method="post" enctype="multipart/form-data">
+				
+				<div class="custom-file-upload">
+				    <input type="file" id="file" name="file"/>
+				</div>
+				<input class="submit-button" type="submit" value="Upload" onclick="return show_loader();"  />
+			</form
 		</div>
-		<input class="submit-button" type="submit" value="Upload" onclick="return show_loader();"  />
-	</form>
+	</div>
 
 </div>
 {% endblock %}

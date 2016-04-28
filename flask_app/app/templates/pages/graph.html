@@ -2,20 +2,38 @@
 
 {% block styles %}
 <link rel="stylesheet" type="text/css" href="static/css/personal-graph.css">
+<link rel="stylesheet" type="text/css" href="static/css/slider.css">
 {% endblock %} 
 
 {% block main %}
-
-<div>
-	<div id="personal-graph"></div>
-	<div id="mini-graph"> </div>
+<div class="row">
+  	<div class="col-md-offset-2 col-md-8">
+		<div id="personal-graph"></div>
+		<div id="mini-graph"> </div>
+	</div>
 </div>
 <!-- <div id="personal-graph"></div> -->
-<div id="graph">
-	<svg class="graph"></svg>
-	<input class ="slider" type="range" min="0" max="100" step="1" value="0" oninput="updateSlider(this.value)"></input>
+<div class="row">
+  	<div class="col-md-12">
+		<div id="graph">
+			<div class="row">
+  				<div class="col-md-offset-4 col-md-4 center">
+					<h3>Current Date</h3>
+				</div>
+			</div>
+			<div class="row">
+  				<div class="col-md-12" id="graph-container">
+					<svg class="graph"></svg>
+				</div>
+			</div>
+			<div class="row">
+  				<div class="col-md-offset-4 col-md-4">
+					<input class ="slider" type="range" min="0" max="100" step="1" value="0" oninput="updateSlider(this.value)"></input>
+				</div>
+			</div>
+		</div>
+	</div>
 </div>
-
 {% endblock %}
 
 {% block scripts %}

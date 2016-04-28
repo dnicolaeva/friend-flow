@@ -9,7 +9,7 @@
 var time = [];
 
 var width = 600,
-    height = 600,
+    height = 500,
     centerx = width /2,
     centery = height /2,
     minDist = 80,
@@ -22,11 +22,25 @@ var graph = d3.select(".graph")
     .attr("width", width)
     .attr("height", height);
 
+var img_array = [
+"http://www.wall321.com/thumbnails/detail/20120506/green%20animals%20photography%20snakes%201920x1080%20wallpaper_www.wall321.com_85.jpg",
+"http://www.chainimage.com/images/download-birds-duckling-baby-swimming-animals-yellow-water-animal.jpg",
+"http://www.mobiletoones.com/downloads/wallpapers/iphone_wallpapers/preview/53/79066-cardinal-red-animal-iphone-wallpaper.jpg",
+"http://dreamlandia.com/images/L/ladybug.jpg",
+"http://animaliaz-life.com/data_images/chameleon/chameleon2.jpg",
+"http://www3.canisius.edu/~grandem/butterflylifecycle/Butterfly.jpg",
+"https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg",
+"http://static1.comicvine.com/uploads/scale_large/11122/111225835/4716707-the+mask.jpg",
+"http://animalwall.xyz/wp-content/uploads/2015/10/frogs-little-red-frog-poison-46-phone-wallpapers.jpg",
+"http://moransanimaladaptations.yolasite.com/resources/45.jpg",
+"http://science-all.com/images/fox/fox-05.jpg",
+"http://i0.wp.com/cdn.bgr.com/2015/10/bear.jpg?w=625"
+]
 
 $(window).load(function(){ 
 	//scale width to size of container
-	console.log($( ".container" ).width());
-    width = $( ".container" ).width();
+	console.log($( "#graph-container" ).width());
+    width = $( "#graph-container" ).width();
     centerx = width /2,
     graph = d3.select(".graph")
     	.attr("width", width)
@@ -74,13 +88,14 @@ function startData(time, timeData){
 
 	circles.append('defs')
         .append('pattern')
-            .attr('id', function(d) { return (d.id+"-icon");}) // just create a unique id (id comes from the json)
+            .attr('id', function(d, i) { return (img_array[i]);}) // just create a unique id (id comes from the json)
             .attr('width', 1)
             .attr('height', 1)
             .attr('patternContentUnits', 'objectBoundingBox')
             .append("svg:image")
-                .attr("xlink:xlink:href", function(d) { 
-                return (d.icon);}) // "icon" is my image url. It comes from json too. The double xlink:xlink is a necessary hack (first "xlink:" is lost...).
+                .attr("xlink:xlink:href", function(d, i) { 
+               		return (img_array[i]);
+                }) // "icon" is my image url. It comes from json too. The double xlink:xlink is a necessary hack (first "xlink:" is lost...).
                 .attr("x", 0)
                 .attr("y", 0)
                 .attr("height", 1)
@@ -89,7 +104,6 @@ function startData(time, timeData){
 
 	circles.append("circle")
 		.attr("id", function(d) { 
-			console.log("making id");
 			return (d.id);
 		})
 		.attr("class", "circle")
@@ -104,7 +118,7 @@ function startData(time, timeData){
 				return xtrans;
 		    })
 		    .attr("r", circleRadius)
-		    .style("fill", function(d) { return ("url(#"+d.id+"-icon)");})
+		    .style("fill", function(d, i) { return ("url(#"+img_array[i]+")");})
 		    .attr("stroke-width", strokeWidth)
 		    .attr("stroke", function(d){
 		    	return getStrokeColor(d);
