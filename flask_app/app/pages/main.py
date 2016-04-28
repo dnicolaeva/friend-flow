@@ -74,19 +74,21 @@ def diff_month(d1, d2):
     return (d1.year - d2.year)*12 + d1.month - d2.month
 
 def jsonify(stats_array):
-    stringarray = '['
+    stringarray = '[' 
     for week_dict in stats_array:
-        weekarr = '['
+        weekarr = '[' 
         for name in week_dict:
             json_string = getstringfromstats(name, week_dict[name])
             weekarr = weekarr + json_string + ', '
         if len(weekarr) < 2:
             weekarr = ''
         else:
-            weekarr = weekarr[:-2] + ']'
-        if weekarr != '':
-            stringarray = stringarray + weekarr + ', '
-    stringarray = stringarray[:-2] + ']'
+            weekarr = weekarr[:-2] + '], '
+            stringarray = stringarray + weekarr
+    if len(stringarray) > 2:
+        stringarray = stringarray[:-2] + ']' 
+    else:
+        stringarray = stringarray + ']' 
     return stringarray
        
 def getstringfromstats(name, stats_array):
