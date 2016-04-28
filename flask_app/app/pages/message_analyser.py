@@ -24,6 +24,6 @@ def message_stats(week_array):
                 sentiment = float(sentiment + sentiments[name]) / weeknum
                 runningdict[4] = sentiment
         weeknum+=1
-        results.append(deepcopy(runningdict))       
+        results.append(runningdict)       
     return results
 

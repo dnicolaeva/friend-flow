@@ -35,27 +35,17 @@ def upload():
     print "Invalid file type"
     return redirect(url_for('index'))
 
+  processed_json = dataloader.load_friendship_json(file)
   valid_file = dataloader.validify(file)
   
   if not valid_file:
     print "Invalid file schema"
     return redirect(url_for('index'))
   
-  global message_file
-  message_file = dataloader.read_file(file);
-  return render_template('pages/fbfriends.html')
-  
-@app.route('/fbfriends', methods=['POST'])
-def fbfriends():
-  fbjson = request.form['fbjson']
-  
-  global message_file
   global processed_json
-
-  processed_json = dataloader.load_friendship_json(message_file, fbfriends)
-  
+  processed_json = dataloader.load_friendship_json(file)
   return render_template('pages/graph.html')
-
+  
 @app.route('/processed-json/', methods=['GET'])
 def echo():
     global processed_json
