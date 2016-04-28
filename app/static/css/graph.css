@@ -1,11 +1,28 @@
-.graph circle {
-  /*fill: steelblue;*/
+#minimize-personal{
+	display: none;
+	position: fixed;
+	top: 80px;
+	right: 30px;
+	cursor: pointer;
+    color: #fff;
+    font-size: 16px;
+    text-transform: uppercase;
+    padding: 11px 20px;
+    border: none;
+    margin-left: -1px;
+    background-color: #DF744A;
+    -moz-transition: all 0.2s ease-in;
+    -o-transition: all 0.2s ease-in;
+    -webkit-transition: all 0.2s ease-in;
+    transition: all 0.2s ease-in;
 }
-.graph rect {
-  fill: #444;
-}
-.graph text {
-  fill: black;
-  font: 10px sans-serif;
-  text-anchor: end;
+
+.legend{
+	position: fixed;
+	left: 30px;
+	bottom: 30px;
+	width: 270px;
+	font-size: 13px;
+	background-color: #FEDCD2;
+	padding: 10px 20px;
 }

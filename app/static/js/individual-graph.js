@@ -26,6 +26,7 @@ function viewPersonalGraph(centerx, centery){
     // Adds the svg canvas
     var svg = d3.select("#personal-graph")
         .append("svg")
+        .   attr("id", "personal-svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -83,5 +84,8 @@ function viewPersonalGraph(centerx, centery){
 
     });
 
-    $("#personal-graph").slideDown("slow");}
+    $("#personal-graph").slideDown("slow");
+    $("#minimize-personal").show();
+
+}
 

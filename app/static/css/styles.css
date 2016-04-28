@@ -1,6 +1,10 @@
 /*@import "compass/css3";*/
 @import url("http://fonts.googleapis.com/css?family=Lato");
 
+.top-margin{
+  margin-top: 50px;
+}
+
 body {
   font-family: Lato, Arial; 
   padding-top: 50px;

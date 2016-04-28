@@ -58,6 +58,8 @@ $(window).load(function(){
 		    time = sortTime(time);
 			startData(0, time);
 			addCircleActions();
+			document.getElementById("dateDisplay").value = timeVal;
+			$("#dateDisplay").html(time[timeVal][0].week);
 	    }
 	});  
 
@@ -88,7 +90,7 @@ function sortTime(timeArray){
 	return timeArray;
 }
 
-function resizeGraph(newWidth, newHeight){
+function resizeGraph(newWidth, newHeight, big){
 	console.log("resizing to ", newWidth);
 //scale width to size of container
 	graph.selectAll("svg > *").remove();
@@ -103,8 +105,13 @@ function resizeGraph(newWidth, newHeight){
     centerx = width /2,
     centery = height /2,
     minDist = height/6,
-    circleRadius = height/24,
-    maxLength = (centerx - circleRadius) - height/5,
+    circleRadius = height/24;
+    if(big){
+    	maxLength = (centerx - circleRadius) - height/2;
+    }
+    else{
+    	maxLength = (centerx - circleRadius) - height/5;
+    }
     strokeWidth = 4,
     fontSize = height / 32,
     data = new Array;
@@ -308,7 +315,7 @@ function getCircleX(d,i){
 
 function updateSlider(timeVal){
 	document.getElementById("dateDisplay").value = timeVal;
-	$("#dateDisplay").html(timeVal);
+	$("#dateDisplay").html(time[timeVal][0].week);
 	reloadData(timeVal, time);
 }
 
@@ -326,14 +333,20 @@ function addCircleActions(){
 	var people = document.getElementsByClassName("circle");
 	for (var i = 0; i < people.length; i++) {
 	    people[i].addEventListener("click", function() { 
+	    	if(  $("#personal-graph").is(":visible") == true ){  
+		        return;       
+		    }
 	        viewPersonalGraph();
-	        resizeGraph(250, 250);
+	        resizeGraph(250, 250, false);
 	    });
 	}
 }
-$( "#minimize-personal" ).click(slideUpGraph());
-function slideUpGraph(){
-    $("#personal-graph").hide();
+
+
+function closePersonalGraph(){
+	$( "#personal-svg" ).remove();	
+	$( "#personal-graph" ).hide();	
+	width = $( "#graph-container" ).width();
+	resizeGraph(width, 500, true);
+
 }
-
-
