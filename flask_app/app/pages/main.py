@@ -26,8 +26,9 @@ def tie_strengths(msg_array):
                 names.append(name)
             curr_stats = week[name]
             tie = score(curr_stats, name)
+            deriv = (tie - prev_strength + 1) / 2
             values.append(tie)
-            currdict[name] = [curr_stats[0], tie, tie - prev_strength]
+            currdict[name] = [curr_stats[0], tie, deriv]
         values.sort(reverse=True)
         maxppl = 11 
         if len(values) < 12:
@@ -37,7 +38,8 @@ def tie_strengths(msg_array):
         for name in currdict:
             if currdict[name][1] > values[maxppl]:
                 culleddict[name] = currdict[name]
-        if len(values) > 12:
+        print len(culleddict)
+        if len(culleddict) == 11:
             culledresults.append(culleddict)
         weeknum+=1
     jsonarray = jsonify(culledresults)

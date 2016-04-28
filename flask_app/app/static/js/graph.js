@@ -54,6 +54,7 @@ $(window).load(function(){
 	    success: function(response) {
 		    time = JSON.parse(response); 
 		    //sort time array
+		    console.log(time)
 		    time = sortTime(time);
 			startData(0, time);
 			addCircleActions();
@@ -128,7 +129,7 @@ function startData(time, timeData){
 		.transition()
 	    .attr("x",-1)
 	    .attr("y",0)
-	    .attr("height", function(d){return (minDist+ d.tieStrength * maxLength);})
+	    .attr("height", function(d){return (minDist+ (1-d.tieStrength) * maxLength);})
 	    .attr("width", 2)
 	    .attr("fill", function(d){
 		    return getStrokeColor(d);
@@ -160,12 +161,12 @@ function startData(time, timeData){
 		.attr("class", "circle")
 		    .attr("cy", function(d, i){ 
 		    	var degrees = i * (360/data.length);
-		    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+		    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * (1-d.tieStrength) + minDist));
 		    	return ytrans; 
 		    })
 		    .attr("cx", function(d, i){ 
 		    	var degrees = i * (360/data.length);
-		    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+		    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * (1-d.tieStrength) + minDist));
 				return xtrans;
 		    })
 		    .attr("r", circleRadius)
@@ -221,7 +222,7 @@ function reloadData(time, timeData){
 		//-2 for width offset
 	    .attr("x",-1)
 	    .attr("y",0)
-	    .attr("height", function(d){return (minDist+ d.tieStrength * maxLength);})
+	    .attr("height", function(d){return (minDist+ (1-d.tieStrength) * maxLength);})
 	    .attr("width", 2)
 	    .attr("fill", function(d){
 		    return getStrokeColor(d);
@@ -234,12 +235,12 @@ function reloadData(time, timeData){
 	circles.select("circle")
 	    .attr("cy", function(d, i){ 
 	    	var degrees = i * (360/data.length);
-	    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+	    	var ytrans = (Math.cos(radians(degrees)) * (maxLength * (1-d.tieStrength) + minDist));
 	    	return ytrans; 
 	    })
 	    .attr("cx", function(d, i){ 
 	    	var degrees = i * (360/data.length);
-	    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+	    	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * (1-d.tieStrength) + minDist));
 			return xtrans;
 	    })
 	    .attr("r", circleRadius)
@@ -295,13 +296,13 @@ function getColorEmotion(value){
 
 function getCircleY(d,i){
 	var degrees = i * (360/data.length);
-	var ytrans = (Math.cos(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+	var ytrans = (Math.cos(radians(degrees)) * (maxLength * (1-d.tieStrength) + minDist));
 	return ytrans; 
 }
 
 function getCircleX(d,i){
 	var degrees = i * (360/data.length);
-	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * d.tieStrength + minDist));
+	var xtrans = -1 * (Math.sin(radians(degrees)) * (maxLength * (1-d.tieStrength)+ minDist));
 	return xtrans;
 }
 
