@@ -1,5 +1,0 @@
-# Flask Framework
-Flask==0.10.1
-Flask-SQLAlchemy==2.1
-sqlalchemy==1.0.12
-Flask-Assets==0.11
