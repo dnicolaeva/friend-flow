@@ -1,13 +1,12 @@
 import keyword_extraction
 
-
 def message_stats(week_array):
     results = []
     runningdict = {}
     id_counter = 0
     weeknum = 1
-    print "week_array"
-    print week_array
+    #print "week_array"
+    #print week_array
     for week in week_array:
         print "Week:"
         print week

@@ -1,6 +1,7 @@
 import fb_messages
 import message_analyser
 import datetime
+import random
 
 def getJSON(soup):
 	week = create_week_array(soup)
@@ -11,6 +12,7 @@ def tie_strengths(msg_array):
     names = []
     results = []
     weeknum = 0
+    #print stats_array
     for week in stats_array:
         currdict = {}
         values = []
@@ -21,6 +23,9 @@ def tie_strengths(msg_array):
             else:
                 names.append(name)
             curr_stats = week[name]
+            print name
+            print curr_stats[0]
+            print currdict[name]
             tie = score(curr_stats)
             values.append(tie)
             #[id, tiestrength, tiederiv]

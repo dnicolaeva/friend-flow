@@ -7,6 +7,7 @@ import main
 def load_friendship_json(file):
 	#file_contents is the message raw content
 	#need to parse it into array of dictionaries ->
+	# fd = open(path, 'r')
 	soup = BeautifulSoup(file, 'html.parser')
 	json = main.getJSON(soup)
 	print json

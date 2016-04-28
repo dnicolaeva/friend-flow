@@ -4,11 +4,7 @@ import sys
 
 def return_sentiments(all_messages):
     sentiments = {}
-    print "Hey everybody!!!"
-    print all_messages
     for recipient in all_messages:
-        print recipient
-
         text = all_messages[recipient]
         sentiments[recipient] = get_keywords(text)
     return sentiments
@@ -26,5 +22,7 @@ def get_keywords(text):
                 score = score + float(keyword['sentiment']['score'])
     else:
         print('Error in keyword extaction call: ', response['statusInfo'])
+    if count == 0:
+        return 0
     return score / count
 
