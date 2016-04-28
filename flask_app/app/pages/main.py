@@ -5,6 +5,7 @@ import random
 
 def getJSON(soup):
     week = create_week_array(soup)
+    print "GOT WEEKS!"
     return tie_strengths(week)
 
 def tie_strengths(msg_array):
@@ -17,31 +18,20 @@ def tie_strengths(msg_array):
     for week in stats_array:
         currdict = {}
         values = []
-        #print 'week is'
-        #print week
         for name in week:
-            #print 'names is'
-            #print names
             prev_strength = 0;
             if name in names:
                 prev_strength = results[weeknum-1][name][1]
             else:
                 names.append(name)
             curr_stats = week[name]
-            #print 'hi im here'
-            #print name
-            #print curr_stats
             tie = score(curr_stats)
             values.append(tie)
-            #[id, tiestrength, tiederiv]
-            print 'printing stuff here'
-            print curr_stats
-            print tie
-            print prev_strength
             currdict[name] = [curr_stats[0], tie, tie - prev_strength]
-            print 'hi now here'
         values.sort(reverse=True)
-        maxppl = 11 if len(values) > 12 else len(values)-1
+        maxppl = 11 
+        if len(values) < 12:
+            maxppl = len(values)-1
         results.append(currdict)
         culleddict = {}
         for name in currdict:
@@ -49,9 +39,8 @@ def tie_strengths(msg_array):
                 culleddict[name] = currdict[name]
         culledresults.append(culleddict)
         weeknum+=1
-    jsonarray = jsonify(results)
+    jsonarray = jsonify(culledresults)
     return jsonarray
-
 
 #stats = [id, first message date, last message date, num messages, sentiment score]
 #tie strength is 0-1
@@ -59,16 +48,19 @@ def score(stats):
     return random.random()
 
 def jsonify(stats_array):
-    stringarray = []
+    stringarray = '['
     for week_dict in stats_array:
-        weekarr = []
+        weekarr = '['
         for name in week_dict:
             json_string = getstringfromstats(name, week_dict[name])
-            weekarr.append(json_string)
-        stringarray.append(weekarr)
+            weekarr = weekarr + json_string + ', '
+        weekarr = weekarr[:-2] + ']'
+        stringarray = stringarray + weekarr + ', '
+    stringarray = stringarray[:-2] + ']'
+    return stringarray
        
 def getstringfromstats(name, stats_array):
-    return '{ "tieStrength": ' + str(stats_array[1]) + ', "tieStrengthDerivative": ' + str(stats_array[2]) + ', "name": ' + name + ', "id": ' + str(stats_array[0]) + '}'
+    return '{ "tieStrength": ' + str(stats_array[1]) + ', "tieStrengthDerivative": ' + str(stats_array[2]) + ', "name": "' + name + '", "id": ' + str(stats_array[0]) + '}'
 
 
 def find_index_in_weeks(time, min_time):

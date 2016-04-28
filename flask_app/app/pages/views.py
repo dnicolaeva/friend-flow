@@ -35,15 +35,17 @@ def upload():
     print "Invalid file type"
     return redirect(url_for('index'))
 
-  processed_json = dataloader.load_friendship_json(file)
-  valid_file = dataloader.validify(file)
+  # valid_file = dataloader.validify(file)
   
-  if not valid_file:
-    print "Invalid file schema"
-    return redirect(url_for('index'))
+  # if not valid_file:
+  #   print "Invalid file schema"
+  #   return redirect(url_for('index'))
   
   global processed_json
   processed_json = dataloader.load_friendship_json(file)
+  if processed_json is None:
+    print "Invalid file schema"
+    return redirect(url_for('index'))
   return render_template('pages/graph.html')
   
 @app.route('/processed-json/', methods=['GET'])

@@ -9,7 +9,7 @@
 var time = [];
 
 var width = 600,
-    height = 500,
+    height = 200,
     centerx = width /2,
     centery = height /2,
     minDist = 80,
@@ -18,7 +18,7 @@ var width = 600,
     strokeWidth = 4,
     data = new Array;
 
-var graph = d3.select(".graph")
+var graph = d3.select(".mini-graph")
     .attr("width", width)
     .attr("height", height);
 
@@ -39,10 +39,10 @@ var img_array = [
 
 $(window).load(function(){ 
 	//scale width to size of container
-	console.log($( "#graph-container" ).width());
-    width = $( "#graph-container" ).width();
+	console.log($( "#mini-graph" ).width());
+    width = $( "#mini-graph" ).width();
     centerx = width /2,
-    graph = d3.select(".graph")
+    graph = d3.select("#mini-graph")
     	.attr("width", width)
     	.attr("height", height);
 
@@ -52,7 +52,7 @@ $(window).load(function(){
 	    contentType: "application/json; charset=utf-8",
 	    success: function(response) {
 		    time = JSON.parse(response); 
-		    	console.log(time);
+		    	console.log("startin");
 
 			startData(0, time);
 
@@ -270,7 +270,6 @@ function addCircleActions(){
 	var people = document.getElementsByClassName("circle");
 	for (var i = 0; i < people.length; i++) {
 	    people[i].addEventListener("click", function() { 
-	        alert(this.id);
 	        viewPersonalGraph();
 	    });
 	}
