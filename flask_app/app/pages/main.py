@@ -25,7 +25,7 @@ def tie_strengths(msg_array):
             else:
                 names.append(name)
             curr_stats = week[name]
-            tie = score(curr_stats)
+            tie = score(curr_stats, name)
             values.append(tie)
             currdict[name] = [curr_stats[0], tie, tie - prev_strength]
         values.sort(reverse=True)
@@ -37,15 +37,39 @@ def tie_strengths(msg_array):
         for name in currdict:
             if currdict[name][1] > values[maxppl]:
                 culleddict[name] = currdict[name]
-        culledresults.append(culleddict)
+        if len(values) > 12:
+            culledresults.append(culleddict)
         weeknum+=1
     jsonarray = jsonify(culledresults)
+    print jsonarray
     return jsonarray
 
 #stats = [id, first message date, last message date, num messages, sentiment score]
 #tie strength is 0-1
-def score(stats):
-    return random.random()
+def score(stats, name):
+    first = diff_month(stats[6], stats[1]) * (.2/12)
+    if first > 1:
+        first = 1
+    last = 1 - ((stats[6] - stats[2]).days * .01)
+    if last < 0:
+        last = 0
+    number = (stats[3] / ((stats[2] - stats[1]).days + 1)) * .05
+    if number > 1:
+        number = 1
+    sentiment = (stats[4] + 1) / 2
+    prev = .02 * stats[5]
+    if prev > 1:
+        prev = 1
+    score = (.05 * first) + (.25 * last) + (.25 * number) + (.1 * sentiment) + (.35 * prev)
+    #return random.random()
+    #print "scoring", name
+    #print stats
+    #print first, last, number, sentiment
+    #print score
+    return score
+
+def diff_month(d1, d2):
+    return (d1.year - d2.year)*12 + d1.month - d2.month
 
 def jsonify(stats_array):
     stringarray = '['
@@ -54,8 +78,12 @@ def jsonify(stats_array):
         for name in week_dict:
             json_string = getstringfromstats(name, week_dict[name])
             weekarr = weekarr + json_string + ', '
-        weekarr = weekarr[:-2] + ']'
-        stringarray = stringarray + weekarr + ', '
+        if len(weekarr) < 2:
+            weekarr = ''
+        else:
+            weekarr = weekarr[:-2] + ']'
+        if weekarr != '':
+            stringarray = stringarray + weekarr + ', '
     stringarray = stringarray[:-2] + ']'
     return stringarray
        
