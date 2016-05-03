@@ -25,7 +25,6 @@ function viewPersonalGraph(time, currentTime, personId){
     // Define the line
     var valueline = d3.svg.line()
         .x(function(d, i) { 
-            console.log(data[i]);
             return x(data[i].date); 
         })
         .y(function(d, i) { return y(data[i].close); });
@@ -91,7 +90,6 @@ function viewPersonalGraph(time, currentTime, personId){
         ])                  
     .enter().append("stop")         
         .attr("offset", function(d, i) { 
-            console.log(data[i]);
             return data[i].offset; 
         })   
         .attr("stop-color", function(d, i) { return data[i].color; });

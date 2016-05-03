@@ -163,8 +163,8 @@ function startData(time, timeData){
 				.attr("preserveAspectRatio", "xMinYMin slice");
 
 	circles.append("circle")
-		.attr("id", function(d) { 
-			return (d.id);
+		.attr("id", function(d, i) { 
+			return (i);
 		})
 		.attr("class", "circle")
 		    .attr("cy", function(d, i){ 
