@@ -17,7 +17,8 @@ var width = 600,
     maxLength = (centerx - circleRadius) - height/5,
     strokeWidth = 4,
     fontSize = height / 32,
-    data = new Array;
+    data = new Array
+    timeVal = 0;
 
 var graph = d3.select(".graph")
     .attr("width", width)
@@ -32,7 +33,6 @@ var img_array = [
 	"http://www3.canisius.edu/~grandem/butterflylifecycle/Butterfly.jpg",
 	"https://tctechcrunch2011.files.wordpress.com/2012/09/mark.jpeg",
 	"http://static1.comicvine.com/uploads/scale_large/11122/111225835/4716707-the+mask.jpg",
-	"http://animalwall.xyz/wp-content/uploads/2015/10/frogs-little-red-frog-poison-46-phone-wallpapers.jpg",
 	"http://moransanimaladaptations.yolasite.com/resources/45.jpg",
 	"http://science-all.com/images/fox/fox-05.jpg",
 	"http://i0.wp.com/cdn.bgr.com/2015/10/bear.jpg?w=625"
@@ -58,6 +58,7 @@ $(window).load(function(){
 		    time = sortTime(time);
 			startData(0, time);
 			addCircleActions();
+			timeVal = 0;
 			document.getElementById("dateDisplay").value = timeVal;
 			$("#dateDisplay").html(time[timeVal][0].week);
 	    }
@@ -222,7 +223,8 @@ function startData(time, timeData){
 
 //change what you need to change at reload
 function reloadData(time, timeData){
-	data = timeData[time];
+	timeVal = time;
+	data = timeData[timeVal];
 	var circles = graph.selectAll("g").data(data).transition();
 
 	circles.select("rect")
@@ -332,14 +334,24 @@ function degrees(radians) {
 function addCircleActions(){
 	var people = document.getElementsByClassName("circle");
 	for (var i = 0; i < people.length; i++) {
-	    people[i].addEventListener("click", function() { 
-	    	if(  $("#personal-graph").is(":visible") == true ){  
-		        return;       
-		    }
-	        viewPersonalGraph();
-	        resizeGraph(250, 250, false);
-	    });
+		helpMe(people, i);
 	}
+}
+
+function helpMe(people, i){
+	//fuck javascript
+    var curId = JSON.parse(JSON.stringify(people[i].id));
+    //console.log(curId);
+
+    people[i].addEventListener("click", function() { 
+	//fuck javascript
+    	if(  $("#personal-graph").is(":visible") == true ){  
+	        return;       
+	    }
+        viewPersonalGraph(time, timeVal, curId);
+        resizeGraph(250, 250, false);
+    });
+	   	
 }
 
 

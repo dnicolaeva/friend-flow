@@ -1,11 +1,15 @@
 //Set the dimensions of the canvas / graph
-function viewPersonalGraph(centerx, centery){
+function viewPersonalGraph(time, currentTime, personId){
     var margin = {top: 30, right: 20, bottom: 30, left: 50},
         width = 600 - margin.left - margin.right,
         height = 270 - margin.top - margin.bottom;
 
     // Parse the date / time
-    var parseDate = d3.time.format("%d-%b-%y").parse;
+    function parseDate(dateString){
+        //"2011-03-18"
+        var dateVals = dateString.split("-");
+        return new Date(dateVals[0], dateVals[1], dateVals[2]);
+    }
 
     // Set the ranges
     var x = d3.time.scale().range([0, width]);
@@ -20,13 +24,16 @@ function viewPersonalGraph(centerx, centery){
 
     // Define the line
     var valueline = d3.svg.line()
-        .x(function(d) { return x(d.date); })
-        .y(function(d) { return y(d.close); });
+        .x(function(d, i) { 
+            console.log(data[i]);
+            return x(data[i].date); 
+        })
+        .y(function(d, i) { return y(data[i].close); });
         
     // Adds the svg canvas
     var svg = d3.select("#personal-graph")
         .append("svg")
-        .   attr("id", "personal-svg")
+            .attr("id", "personal-svg")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -34,55 +41,78 @@ function viewPersonalGraph(centerx, centery){
                   "translate(" + margin.left + "," + margin.top + ")");
 
     // Get the data
-    d3.csv("static/js/test.csv", function(error, data) {
-        data.forEach(function(d) {
-            d.date = parseDate(d.date);
-            d.close = +d.close;
-        });
+    var data = [];
+    console.log(time[timeVal]);
+    var ID = time[timeVal][personId].id
+    for (var i = 0; i < time.length; i++){
+        tempID = -1;
+        for (j = 0; j < time[i].length; j++){
+            if (time[i][j].id == ID){
+                tempID = j;
+            }
+        }
 
-        // Scale the range of the data
-        x.domain(d3.extent(data, function(d) { return d.date; }));
-        y.domain([0, d3.max(data, function(d) { return d.close; })]);
+        //onsole.log(time[i], i);
+        //console.log(time[i][tempID], tempID);
+        if (tempID == -1){
+            data[i] = {
+                "date": parseDate(time[i][0].week), 
+                "close": 0
+            }
+        }
+        else{
+            data[i] = {
+                "date": parseDate(time[i][tempID].week), 
+                "close":time[i][tempID].tieStrength
+            }
+        }
+    }
 
-        svg.append("linearGradient")                
-            .attr("id", "line-gradient")            
-            .attr("gradientUnits", "userSpaceOnUse")    
-            .attr("x1", 0).attr("y1", 0)         
-            .attr("x2", 0).attr("y2", 200)      
-        .selectAll("stop")                      
-            .data([   
-                // Gradient is flipped for some reason, 0-20 is green                          
-                {offset: "0%", color: "#88a734"},       
-                {offset: "30%", color: "#88a734"},
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d, i) { return data[i].date; }));
+    y.domain([0, d3.max(data, function(d, i) { return data[i].close; })]);
 
-                {offset: "30%", color: "#fcd436"},       
-                {offset: "70%", color: "#fcd436"},
+    svg.append("linearGradient")                
+        .attr("id", "line-gradient")            
+        .attr("gradientUnits", "userSpaceOnUse")    
+        .attr("x1", 0).attr("y1", 0)         
+        .attr("x2", 0).attr("y2", 200)      
+    .selectAll("stop")                      
+        .data([   
+            // Gradient is flipped for some reason, 0-20 is green                          
+            {offset: "0%", color: "#88a734"},       
+            {offset: "30%", color: "#88a734"},
 
-                {offset: "70%", color: "#c8333d"},    
-                {offset: "100%", color: "#c8333d"}    
-            ])                  
-        .enter().append("stop")         
-            .attr("offset", function(d) { return d.offset; })   
-            .attr("stop-color", function(d) { return d.color; });
+            {offset: "30%", color: "#fcd436"},       
+            {offset: "70%", color: "#fcd436"},
 
-        // Add the valueline path.
-        svg.append("path")
-            .attr("class", "line")
-            .attr("d", valueline(data));
+            {offset: "70%", color: "#c8333d"},    
+            {offset: "100%", color: "#c8333d"}    
+        ])                  
+    .enter().append("stop")         
+        .attr("offset", function(d, i) { 
+            console.log(data[i]);
+            return data[i].offset; 
+        })   
+        .attr("stop-color", function(d, i) { return data[i].color; });
 
-        // Add the X Axis
-        svg.append("g")
-            .attr("class", "x axis")
-            // .attr("transform", "translate(0," + height + ")")
-            .attr("transform", "translate(0," + 0 + ")")
-            .call(xAxis);
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
 
-        // Add the Y Axis
-        svg.append("g")
-            .attr("class", "y axis")
-            .call(yAxis);
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        // .attr("transform", "translate(0," + height + ")")
+        .attr("transform", "translate(0," + 0 + ")")
+        .call(xAxis);
 
-    });
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
 
     $("#personal-graph").slideDown("slow");
     $("#minimize-personal").show();
