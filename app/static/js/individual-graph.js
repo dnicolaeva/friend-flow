@@ -90,9 +90,9 @@ function viewPersonalGraph(time, currentTime, personId){
         ])                  
     .enter().append("stop")         
         .attr("offset", function(d, i) { 
-            return data[i].offset; 
+            return d.offset; 
         })   
-        .attr("stop-color", function(d, i) { return data[i].color; });
+        .attr("stop-color", function(d, i) { return d.color; });
 
     // Add the valueline path.
     svg.append("path")
